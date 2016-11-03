@@ -52,7 +52,15 @@ options.rows = 32
 options.cols = 32
 options.chain_length = 1
 options.parallel = 1
-options.hardware_mapping = 'adafruit-hat' 
+options.gpio_slowdown = 2
+options.drop_privileges = True
+
+# I wired together pins 4 and 8 which for the Adafruit product 
+# effectively changes it to use PWM.  This was advertised as 
+# a way to decrease flicker.  But once I did it I didn't see any
+# reduction.  Still, leaving it here so I don't have to desolder
+# the two.
+options.hardware_mapping = 'adafruit-hat-pwm'
 
 matrix = RGBMatrix(options = options)
 
