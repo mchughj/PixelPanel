@@ -8,7 +8,9 @@ The specific hardware used in this project includes:
  * [Raspberry PI Hat](https://www.adafruit.com/product/2345)
  * Raspberry PI 2
  
-For initial installation follow the instructions found [Here](https://learn.adafruit.com/raspberry-pi-rgb-led-matrix-webapp?view=all).
+For initial installation follow the instructions found in the [RGB Matrix Hat](https://learn.adafruit.com/adafruit-rgb-matrix-plus-real-time-clock-hat-for-raspberry-pi?view=all) documentation.  This will get the system running for both C and python programs.
+
+* Starting the server
 
 To start the http server instance use:
 
