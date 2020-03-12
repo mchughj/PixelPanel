@@ -1,7 +1,7 @@
 # PixelPanel
 This repo contains the source code for a 32x32 Pixel Panel that runs on a raspberry PI and utilizes a 32x32 matrix display.  
 
-![PixelPanel In Action](/documentation/PixelPanel1.jpg | width=200)
+![PixelPanel In Action](/documentation/PixelPanel1.jpg =250x))
 
 The specific hardware used in this project includes:
  * [32X32 RGB Panel](https://www.adafruit.com/product/1484)
