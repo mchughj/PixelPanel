@@ -169,7 +169,7 @@ class MyHandler(BaseHTTPRequestHandler):
     logging.debug("Done with response to play random")
 
   def sleep(self):
-    duration_seconds = 29
+    duration_seconds = 4*60*60
     logging.debug("Going to sleep; duration_seconds: %d", duration_seconds)
     self.pixelPlayer.sleep(duration_seconds)
     self.send_response(200)
