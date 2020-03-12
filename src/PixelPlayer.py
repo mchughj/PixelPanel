@@ -16,6 +16,8 @@ class PixelPlayer:
     self.runRandom = False
     self.resourcePath = resourcePath
     self.lock = lock
+    self.sleeping = False
+    self.wakeUpTime = 0
 
   def loadImage(self, filename):
     with self.lock:
@@ -25,6 +27,9 @@ class PixelPlayer:
       self.randomTimeDelay = 0
       self.nextRandomTime = 0
       self.frameDisplayStart = int(round(time.time() * 1000))
+      self.sleeping = False
+      self.wakeUpTime = 0
+
       logging.debug("image loaded; filename: %s", filename)
       self.matrix.Clear()
       self.matrix.SetImage(self.image.getNextFrame())
@@ -47,6 +52,14 @@ class PixelPlayer:
     self.runRandom = True
     self.randomTimeDelay = rTime
     self.nextRandomTime = time.time() * 1000 + self.randomTimeDelay
+
+  def sleep(self, sleepDurationSeconds):
+    with self.lock:
+        self.image = None
+        self.imageFilename= None
+        self.sleeping = True
+        self.wakeUpTime = time.time() + sleepDurationSeconds
+        self.matrix.Clear()
 
   def playNextFrame(self):
     currentTime = int(round(time.time() * 1000))
@@ -73,8 +86,21 @@ class PixelPlayer:
   def playContinuous(self):
     logging.info('playContinuous: starting...')
     while True:
-      if self.image is None:
-        time.sleep(1)
+      hour = int(time.strftime("%H"))
+      if self.sleeping:
+        t = time.time()
+        logging.info("playContinuous: still in sleepy time; current: %d, wakeup: %d, difference: %d", t, self.wakeUpTime, self.wakeUpTime - t)
+        if t > self.wakeUpTime:
+          logging.info("playContinuous: waking up!")
+          self.runRandomFile(10 * 1000)
+        else:
+          time.sleep(30)
+      elif self.image is None:
+        time.sleep(10)
+      elif hour <= 7:
+        # Going to sleep for an hour
+        logging.info("playContinuous: too early to show images!  hour: %d", hour)
+        self.sleep(60*60)
       else:
         timeToSleep = self.playNextFrame()
         time.sleep(timeToSleep)

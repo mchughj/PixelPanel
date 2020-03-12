@@ -10,7 +10,7 @@ import shutil
 import os
 import os.path
 
-from threading import Lock, Thread
+from threading import RLock, Thread
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from functools import partial
@@ -32,7 +32,7 @@ resourcePath = "/home/pi/PixelPanel/resources/"
 tmpResourcePath = "/home/pi/PixelPanel/resources/tmp/"
 
 # Used to synchronize between threads
-lock = Lock()
+lock = RLock()
 
 #
 # class RGBMatrixOptions:
@@ -168,6 +168,22 @@ class MyHandler(BaseHTTPRequestHandler):
     self.send("</html>")
     logging.debug("Done with response to play random")
 
+  def sleep(self):
+    duration_seconds = 29
+    logging.debug("Going to sleep; duration_seconds: %d", duration_seconds)
+    self.pixelPlayer.sleep(duration_seconds)
+    self.send_response(200)
+    self.send_header('Content-type', 'text/html')
+    self.end_headers()
+    self.send("<html>")
+    self.send("<h1>Pixel Server</h1>")
+    self.send("Sleepy time.  See you in ")
+    self.send(str(duration_seconds))
+    self.send(" seconds!  <a href=\"/\">Return</a>.")
+    self.send("</html>")
+
+
+
   def preview(self, url):
     index = url.rfind('/')
     filename = url[index+1:]
@@ -226,7 +242,7 @@ class MyHandler(BaseHTTPRequestHandler):
     logging.debug("Save it into file: %s", finalFilename)
 
     shutil.copyfile(tmpFilename, finalFilename)
-    os.system( "/home/pi/Dropbox-Uploader/dropbox_uploader.sh upload " + finalFilename + " Projects/PixelPanel/resources")
+    os.system( "/home/pi/Dropbox-Uploader/dropbox_uploader.sh upload -f /home/pi/.dropbox_uploader " + finalFilename + " Projects/PixelPanel/resources")
 
     self.pixelPlayer.loadImage(finalFilename)
 
@@ -263,6 +279,8 @@ class MyHandler(BaseHTTPRequestHandler):
       elif self.path.startswith("/random?"):
         args = urllib.parse.parse_qs(self.path[8:])
         self.random(args["time"][0])
+      elif self.path.startswith("/sleep"):
+        self.sleep()
       else:
         logging.debug("Unexpected request")
 
