@@ -241,7 +241,7 @@ class MyHandler(BaseHTTPRequestHandler):
     logging.debug("Save it into file: %s", finalFilename)
 
     shutil.copyfile(tmpFilename, finalFilename)
-    os.system( "/home/pi/Dropbox-Uploader/dropbox_uploader.sh upload -f /home/pi/.dropbox_uploader " + finalFilename + " Projects/PixelPanel/resources")
+    os.system( "/home/pi/Dropbox-Uploader/dropbox_uploader.sh -f /home/pi/.dropbox_uploader upload " + finalFilename + " Projects/PixelPanel/resources")
 
     self.pixelPlayer.loadImage(finalFilename)
 
