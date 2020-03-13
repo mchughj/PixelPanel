@@ -46,19 +46,30 @@ class AnimatedImage():
             g = p[index*3+1]
             b = p[index*3+2]
             logging.debug( "PRE! Looking at the top left pixel; index: %d, color: %d,%d, %d", index, r,g,b)
-        result = result.convert('RGB')
+        result = result.convert('RGBA')
 
         # If the frame is not 32x32 then center the final frame in a 32 x 32 image
         s = result.size
         if s[0] != 32 or s[1] != 32:
-            r = Image.new('RGB', (32,32))
+            r = Image.new('RGBA', (32,32))
             offsetX = int(( 32 - s[0] ) / 2)
             offsetY = int(( 32 - s[1] ) / 2)
             # logging.debug("AnimatedImage getNextFrame will be resized; whichFrame: %d, size: %s, offsetX: %d, offsetY: %d", self.currentFrame, s, offsetX, offsetY)
             r.paste(result,(offsetX, offsetY))
             result = r
 
-        return result
+        # Manually convert any transparent pixel into a black pixel
+        data = result.getdata()
+        newData = []
+        for item in data:
+            if item[3] == 0:
+                newData.append( (0,0,0,0) )
+            else:
+                newData.append( ( item[0], item[1], item[2], 0 ) )
+        result.putdata(newData)
+
+        # Final conversion into an RGB image which is supported by the Panel.
+        return result.convert('RGB')
 
     def getFrameSize(self):
         return self.size

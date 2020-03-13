@@ -183,7 +183,6 @@ class MyHandler(BaseHTTPRequestHandler):
     self.send("</html>")
 
 
-
   def preview(self, url):
     index = url.rfind('/')
     filename = url[index+1:]
