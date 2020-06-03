@@ -4,3 +4,5 @@ logs/
 */backup
 */tmp/
 **/*.swp
+.vscode/launch.json
+*.gif
