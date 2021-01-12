@@ -35,10 +35,11 @@ class PixelPlayer:
       self.matrix.SetImage(self.image.getNextFrame())
 
   def runRandomFile(self, rTime):
-    logging.debug("Going to get all files for random choice")
+    logging.debug("Going to get all files for random choice; resourcePath: %s", self.resourcePath)
     onlyfiles = [f for f in listdir(self.resourcePath) if os.path.isfile(os.path.join(self.resourcePath, f))] 
   
-    logging.debug("Done getting files")
+    logging.debug("Done getting files; numChoices: %d", len(onlyfiles))
+    logging.debug("Done getting files; choices: %s", ",".join(onlyfiles))
     f = random.choice(onlyfiles)
     logging.debug("Chose the file; filename: %s", f)
 
@@ -97,6 +98,9 @@ class PixelPlayer:
           time.sleep(30)
       elif self.image is None:
         time.sleep(10)
+      elif hour >= 23:
+        logging.info("playContinuous: too late to show images!  hour: %d", hour)
+        self.sleep(10*60)
       elif hour <= 5:
         # Going to sleep for an hour
         logging.info("playContinuous: too early to show images!  hour: %d", hour)

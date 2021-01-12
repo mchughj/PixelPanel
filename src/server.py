@@ -100,6 +100,8 @@ class MyHandler(BaseHTTPRequestHandler):
 
     self.send("Play <a href=\"random?time=13\">Random</a>.");
     self.send("<br><br>")
+    self.send("Go to  <a href=\"sleep\">Sleep</a>.");
+    self.send("<br><br>")
 
     self.send("Resources<br>")
     self.send("<table style=\"width:50%\">")
@@ -295,6 +297,8 @@ def main():
   t = Thread(target=p.playContinuous)
   t.setDaemon(True)
   t.start()
+
+  p.runRandomFile(20*1000)
 
   try:
     handler = partial(MyHandler, p)
