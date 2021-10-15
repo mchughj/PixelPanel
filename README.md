@@ -49,7 +49,7 @@ If you want to run the server instance and see the output (perhaps for debugging
 ```
 sudo systemctl start pixelpanel.service
 cd ~/PixelPanel/src/
-./start_server.py
+./start_server.sh
 ```
 
 

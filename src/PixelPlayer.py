@@ -98,11 +98,10 @@ class PixelPlayer:
           time.sleep(30)
       elif self.image is None:
         time.sleep(10)
-      elif hour >= 23:
+      elif hour >= 21:
         logging.info("playContinuous: too late to show images!  hour: %d", hour)
         self.sleep(10*60)
-      elif hour <= 5:
-        # Going to sleep for an hour
+      elif hour <= 8:
         logging.info("playContinuous: too early to show images!  hour: %d", hour)
         self.sleep(10*60)
       else:
