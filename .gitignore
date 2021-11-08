@@ -5,5 +5,4 @@ logs/
 */tmp/
 **/*.swp
 .vscode/launch.json
-*.gif
 access_token.txt
